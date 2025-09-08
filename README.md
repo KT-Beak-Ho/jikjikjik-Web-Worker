@@ -40,6 +40,21 @@ AI 기반 개인화 추천, 간편한 임금 및 경력 관리를 제공합니�
 
 ## 📖 API 문서
 
+### 설치
+```
+npm i fastify @fastify/cors @fastify/helmet @fastify/rate-limit fastify-type-provider-zod zod dotenv
+npm i -D typescript tsx @types/node pino-pretty
+npm i @fastify/static
+```
+
+### 싫행
+```
+npm run dev
+
+127.0.0.1:3000/api/time
+```
+
+
 ### 인증 관련
 ```
 POST   /api/auth/register     # 회원가입
