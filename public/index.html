@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Fastify 서버 + 정적 페이지</title>
+    <style>
+      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 40px; }
+      button { padding: 8px 14px; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; }
+      pre { background: #f7f7f7; padding: 12px; border-radius: 8px; }
+    </style>
+  </head>
+  <body>
+    <h1>안녕하세요 👋</h1>
+    <p>이 페이지는 <strong>public/index.html</strong>에 있고, Fastify가 정적으로 서빙합니다.</p>
+
+    <h2>API 테스트</h2>
+    <button id="timeBtn">/api/time 호출</button>
+    <pre id="out">결과 대기중…</pre>
+
+    <script src="/js/app.js" defer></script>
+  </body>
+</html>
