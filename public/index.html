@@ -18,12 +18,6 @@
     <button id="timeBtn">/api/time 호출</button>
     <pre id="out">결과 대기중…</pre>
 
-    <script>
-      const out = document.getElementById('out');
-      document.getElementById('timeBtn').addEventListener('click', async () => {
-        const res = await fetch('localhost:3000/api/time');
-        out.textContent = JSON.stringify(await res.json(), null, 2);
-      });
-    </script>
+    <script src="/js/app.js" defer></script>
   </body>
 </html>
