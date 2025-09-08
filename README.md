@@ -42,6 +42,12 @@ AI 기반 개인화 추천, 간편한 임금 및 경력 관리를 제공합니�
 
 ### 설치
 ```
+git clone git@github.com:KT-Beak-Ho/jikjikjik-Web-Worker.git
+cd jikjikjik-Web-Worker
+
+# 서브모듈 초기화 및 clone
+git submodule update --init --recursive
+
 npm i fastify @fastify/cors @fastify/helmet @fastify/rate-limit fastify-type-provider-zod zod dotenv
 npm i -D typescript tsx @types/node pino-pretty
 npm i @fastify/static
