@@ -51,7 +51,7 @@ npm i @fastify/static
 ```
 npm run dev
 
-localhost:3000/api/time
+localhost:3000/
 ```
 
 
