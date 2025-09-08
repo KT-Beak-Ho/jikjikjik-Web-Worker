@@ -38,7 +38,28 @@ AI 기반 개인화 추천, 간편한 임금 및 경력 관리를 제공합니�
 구직자용 웹페이지의 실제 디자인 가안을 확인할 수 있습니다:
 - **라이브 데모**: [노동자 웹페이지 디자인 가안](https://claude.ai/public/artifacts/1039dd88-b56a-47b2-807f-8340a02dfaac)
 
-## 📖 API 문서
+## 📖 API 문서: NodeJS+TS+Fastify
+
+### 설치
+```
+git clone git@github.com:KT-Beak-Ho/jikjikjik-Web-Worker.git
+cd jikjikjik-Web-Worker
+
+# 서브모듈 초기화 및 clone
+git submodule update --init --recursive
+
+npm i fastify @fastify/cors @fastify/helmet @fastify/rate-limit fastify-type-provider-zod zod dotenv
+npm i -D typescript tsx @types/node pino-pretty
+npm i @fastify/static
+```
+
+### 싫행
+```
+npm run dev
+
+localhost:3000/
+```
+
 
 ### 인증 관련
 ```
