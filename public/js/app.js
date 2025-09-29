@@ -226,76 +226,13 @@ function scrollToJobs() {
     }
 }
 
-// 회원가입 단계 관리
-let currentStep = 1;
-
-function nextStep() {
-    const steps = document.querySelectorAll('.form-step');
-    const dots = document.querySelectorAll('.step-dot');
-    
-    if (currentStep < steps.length) {
-        steps[currentStep - 1].classList.remove('active');
-        steps[currentStep].classList.add('active');
-        
-        dots[currentStep - 1].classList.add('completed');
-        dots[currentStep].classList.add('active');
-        
-        currentStep++;
-    }
-}
-
-function prevStep() {
-    const steps = document.querySelectorAll('.form-step');
-    const dots = document.querySelectorAll('.step-dot');
-    
-    if (currentStep > 1) {
-        steps[currentStep - 1].classList.remove('active');
-        steps[currentStep - 2].classList.add('active');
-        
-        dots[currentStep - 1].classList.remove('active');
-        dots[currentStep - 2].classList.remove('completed');
-        
-        currentStep--;
-    }
-}
-
-// 기술 선택 토글
-function toggleSkill(element) {
-    const checkbox = element.querySelector('.skill-checkbox');
-    checkbox.checked = !checkbox.checked;
-    
-    if (checkbox.checked) {
-        element.classList.add('selected');
-    } else {
-        element.classList.remove('selected');
-    }
-}
-
-// 경험 레벨 선택
-function selectExperience(element) {
-    const radio = element.querySelector('.experience-radio');
-    radio.checked = true;
-    
-    document.querySelectorAll('.experience-item').forEach(item => {
-        item.classList.remove('selected');
-    });
-    element.classList.add('selected');
+// 회원가입 모달 표시
+function showSignupModal() {
+    showPage('signup');
 }
 
 // 이벤트 리스너 초기화
 function initializeEventListeners() {
-    // 회원가입 폼 제출
-    const signupForm = document.getElementById('signupForm');
-    if (signupForm) {
-        signupForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            showNotification('회원가입이 완료되었습니다!', 'success');
-            setTimeout(() => {
-                showPage('home');
-                showLoginModal();
-            }, 1000);
-        });
-    }
     
     // 액션 버튼 클릭
     document.addEventListener('click', function(e) {
