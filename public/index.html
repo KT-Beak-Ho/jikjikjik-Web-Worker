@@ -1,23 +1,584 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Fastify 서버 + 정적 페이지</title>
-    <style>
-      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 40px; }
-      button { padding: 8px 14px; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; }
-      pre { background: #f7f7f7; padding: 12px; border-radius: 8px; }
-    </style>
-  </head>
-  <body>
-    <h1>안녕하세요 👋</h1>
-    <p>이 페이지는 <strong>public/index.html</strong>에 있고, Fastify가 정적으로 서빙합니다.</p>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>직직직 - 건설 일자리가 바로 연결되는 곳</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 메인 페이지 -->
+        <div id="homePage" class="page active">
+            <!-- 히어로 섹션 -->
+            <section class="hero-section">
+                
+                <div class="logo-area">
+                    <div class="logo">직직직</div>
+                    <div class="tagline">기업과 노동자를 직접 연결합니다</div>
+                </div>
+                
+                <h1 class="hero-title">
+                    인력사무소 없이<br>
+                    직접 연결되는 일자리
+                </h1>
+                <p class="hero-subtitle">
+                    AI가 맞춤 추천하는 건설 일자리<br>
+                    경력 인증과 법적 보호까지 한번에
+                </p>
+                
+                <div class="cta-group">
+                    <button class="cta-button cta-primary" onclick="showSignupModal()">
+                        무료 가입하기
+                    </button>
+                    <button class="cta-button cta-secondary" onclick="showLoginModal()">
+                        로그인
+                    </button>
+                </div>
+            </section>
 
-    <h2>API 테스트</h2>
-    <button id="timeBtn">/api/time 호출</button>
-    <pre id="out">결과 대기중…</pre>
+            <!-- 통계 카드 섹션 -->
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <div class="stat-value">직접</div>
+                    <div class="stat-label">기업-노동자<br>다이렉트 연결</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">24시간</div>
+                    <div class="stat-label">실시간<br>일자리 매칭</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">전자계약서<br>법적보호</div>
+                </div>
+            </div>
 
-    <script src="/js/app.js" defer></script>
-  </body>
+            <!-- 긴급 알림 배너 -->
+            <div class="urgent-banner">
+                <span class="urgent-icon">🚨</span>
+                <span class="urgent-text">오늘 긴급모집! 강남 오피스텔 현장 20명</span>
+                <span class="urgent-time">마감 2시간 전</span>
+            </div>
+
+            <!-- 실시간 일자리 섹션 -->
+            <section class="jobs-section">
+                <div class="section-header">
+                    <div class="section-title-wrapper">
+                        <div class="live-indicator">
+                            <span class="live-dot"></span>
+                            <span>실시간</span>
+                        </div>
+                        <h2 class="section-title">지금 모집중</h2>
+                    </div>
+                    <a href="#" class="view-all-btn">
+                        전체보기
+                        <span>→</span>
+                    </a>
+                </div>
+
+                <!-- 긴급 일자리 -->
+                <div class="job-card urgent">
+                    <div class="job-badges">
+                        <span class="job-badge badge-urgent">긴급</span>
+                        <span class="job-badge badge-today">오늘시작</span>
+                    </div>
+                    <div class="job-company">
+                        <span class="company-name">삼성물산 건설부문</span>
+                        <span class="company-rating">⭐ 4.8</span>
+                    </div>
+                    <div class="job-title">강남 오피스텔 신축 현장 - 철근공/목수</div>
+                    <div class="job-info">
+                        <span class="job-info-item">📍 강남구 (2.3km)</span>
+                        <span class="job-info-item">📅 오늘 시작</span>
+                        <span class="job-info-item">⏰ 08:00-18:00</span>
+                    </div>
+                    <div class="job-wage">일당 200,000원</div>
+                    <div class="job-benefits">
+                        <span class="benefit-tag">🍚 식사제공</span>
+                        <span class="benefit-tag">🚌 픽업</span>
+                        <span class="benefit-tag">☕ 간식</span>
+                    </div>
+                    <div class="job-status">
+                        <span class="applicants-info">지원자 23명 / 모집 20명</span>
+                        <button class="apply-now-btn">즉시 지원</button>
+                    </div>
+                </div>
+
+                <!-- 프리미엄 일자리 -->
+                <div class="job-card">
+                    <div class="job-badges">
+                        <span class="job-badge badge-premium">프리미엄</span>
+                        <span class="job-badge badge-new">NEW</span>
+                    </div>
+                    <div class="job-company">
+                        <span class="company-name">현대건설</span>
+                        <span class="company-rating">⭐ 4.9</span>
+                    </div>
+                    <div class="job-title">판교 데이터센터 건설 - 전기/설비</div>
+                    <div class="job-info">
+                        <span class="job-info-item">📍 성남시 (5.2km)</span>
+                        <span class="job-info-item">📅 내일부터</span>
+                        <span class="job-info-item">⏰ 08:00-17:00</span>
+                    </div>
+                    <div class="job-wage">일당 220,000원</div>
+                    <div class="job-benefits">
+                        <span class="benefit-tag">🍚 3식제공</span>
+                        <span class="benefit-tag">🚌 셔틀</span>
+                        <span class="benefit-tag">🏠 숙소</span>
+                        <span class="benefit-tag">💰 성과급</span>
+                    </div>
+                    <div class="job-status">
+                        <span class="applicants-info">지원자 45명 / 모집 30명</span>
+                        <button class="apply-now-btn">즉시 지원</button>
+                    </div>
+                </div>
+
+                <!-- 일반 일자리 -->
+                <div class="job-card">
+                    <div class="job-badges">
+                        <span class="job-badge badge-today">오늘마감</span>
+                    </div>
+                    <div class="job-company">
+                        <span class="company-name">대우건설</span>
+                        <span class="company-rating">⭐ 4.6</span>
+                    </div>
+                    <div class="job-title">여의도 리모델링 현장 - 조공/일반인부</div>
+                    <div class="job-info">
+                        <span class="job-info-item">📍 영등포구 (3.8km)</span>
+                        <span class="job-info-item">📅 월~토</span>
+                        <span class="job-info-item">⏰ 07:00-17:00</span>
+                    </div>
+                    <div class="job-wage">일당 165,000원</div>
+                    <div class="job-benefits">
+                        <span class="benefit-tag">🍚 중식제공</span>
+                        <span class="benefit-tag">🚌 픽업</span>
+                    </div>
+                    <div class="job-status">
+                        <span class="applicants-info">지원자 18명 / 모집 15명</span>
+                        <button class="apply-now-btn">즉시 지원</button>
+                    </div>
+                </div>
+
+                <!-- 장기 프로젝트 -->
+                <div class="job-card">
+                    <div class="job-badges">
+                        <span class="job-badge badge-premium">장기</span>
+                    </div>
+                    <div class="job-company">
+                        <span class="company-name">GS건설</span>
+                        <span class="company-rating">⭐ 4.7</span>
+                    </div>
+                    <div class="job-title">인천공항 확장공사 - 전직종 모집</div>
+                    <div class="job-info">
+                        <span class="job-info-item">📍 인천 (25km)</span>
+                        <span class="job-info-item">📅 6개월 이상</span>
+                        <span class="job-info-item">⏰ 08:00-18:00</span>
+                    </div>
+                    <div class="job-wage">일당 180,000원~250,000원</div>
+                    <div class="job-benefits">
+                        <span class="benefit-tag">🍚 3식</span>
+                        <span class="benefit-tag">🏠 숙소</span>
+                        <span class="benefit-tag">🚌 통근</span>
+                        <span class="benefit-tag">💰 보너스</span>
+                    </div>
+                    <div class="job-status">
+                        <span class="applicants-info">지원자 156명 / 모집 100명</span>
+                        <button class="apply-now-btn">즉시 지원</button>
+                    </div>
+                </div>
+
+                <div class="update-time">
+                    최근 업데이트: <span id="updateTime">방금 전</span>
+                </div>
+
+                <button class="load-more-btn">
+                    더 많은 일자리 보기 (+152개)
+                </button>
+            </section>
+
+            <!-- 직직직 핵심 서비스 -->
+            <section class="core-services-section">
+                <div class="core-services-header">
+                    <h2 class="core-services-title">직직직 핵심 서비스</h2>
+                    <p class="core-services-subtitle">건설 일자리의 새로운 기준</p>
+                </div>
+                
+                <div class="service-cards">
+                    <div class="service-card">
+                        <div class="service-icon">🤝</div>
+                        <div class="service-title">기업과 직접 연결</div>
+                        <div class="service-desc">
+                            중간 단계 없이 기업과 직접 매칭<br>
+                            투명한 조건 확인과 빠른 채용
+                        </div>
+                        <div class="service-highlight">수수료 0%</div>
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-icon">📅</div>
+                        <div class="service-title">30일 앞까지 예약</div>
+                        <div class="service-desc">
+                            내일, 다음주, 한달 후까지<br>
+                            미리 예약하고 안정적으로 일하세요
+                        </div>
+                        <div class="service-highlight">일자리 보장</div>
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-icon">🎓</div>
+                        <div class="service-title">경력 인증 시스템</div>
+                        <div class="service-desc">
+                            모든 작업 이력 자동 기록<br>
+                            공식 경력증명서 즉시 발급
+                        </div>
+                        <div class="service-highlight">평생 경력 관리</div>
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-icon">📄</div>
+                        <div class="service-title">100% 법적 보호</div>
+                        <div class="service-desc">
+                            전자계약서 자동 생성<br>
+                            4대보험, 퇴직금 완벽 보장
+                        </div>
+                        <div class="service-highlight">완벽한 보호</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA 섹션 -->
+            <section class="cta-section">
+                <h2 class="cta-title">
+                    지금 가입하고<br>
+                    내일 바로 일하세요
+                </h2>
+                <p class="cta-subtitle">
+                    3분 만에 가입 완료, 수수료 0원
+                </p>
+                <div class="cta-buttons">
+                    <button class="cta-button cta-primary" onclick="showSignupModal()">
+                        무료 가입하기
+                    </button>
+                    <button class="cta-button cta-secondary" onclick="showLoginModal()">
+                        로그인
+                    </button>
+                </div>
+            </section>
+
+            <!-- 푸터 -->
+            <footer id="contact">
+                <div class="footer-container">
+                    <div class="footer-info">
+                        <div class="footer-logo">직직직</div>
+                        <div class="footer-desc">AI 기반 건설 인력 매칭 플랫폼</div>
+                        <div class="footer-contact">
+                            <div>📞 1588-0000</div>
+                            <div>📧 contact@jikjikjik.com</div>
+                            <div>🏢 밀양시 삼문중앙로 2길 24</div>
+                        </div>
+                    </div>
+                    <div class="footer-links">
+                        <div class="footer-section">
+                            <h4>지원</h4>
+                            <a href="#">고객센터</a>
+                            <a href="#">사용법 가이드</a>
+                            <a href="#">FAQ</a>
+                            <a href="#">문의하기</a>
+                        </div>
+                        <div class="footer-section">
+                            <h4>회사</h4>
+                            <a href="#">회사소개</a>
+                            <a href="#">채용정보</a>
+                            <a href="#">파트너십</a>
+                            <a href="#">보도자료</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <div class="footer-bottom-container">
+                        <div>© 2025 직직직. All rights reserved.</div>
+                        <div class="footer-legal">
+                            <a href="#">이용약관</a>
+                            <a href="#">개인정보처리방침</a>
+                            <a href="#">사업자등록번호: 123-45-67890</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+
+            <!-- 플로팅 액션 버튼 -->
+            <div class="fab" onclick="scrollToJobs()">
+                <span class="fab-icon">🔍</span>
+            </div>
+        </div>
+
+        <!-- 우측 사이드 네비게이션 -->
+        <nav class="side-nav">
+            <div class="side-nav-item active" data-tooltip="홈" onclick="showSection('home')">
+                <span class="side-nav-icon">🏠</span>
+                <span class="side-nav-label">홈</span>
+            </div>
+            <div class="side-nav-item" data-tooltip="일자리 찾기" onclick="showLoginAlert()">
+                <span class="side-nav-icon">🔨</span>
+                <span class="side-nav-label">일자리</span>
+            </div>
+            <div class="side-nav-item" data-tooltip="내 일정" onclick="showLoginAlert()">
+                <span class="side-nav-icon">📋</span>
+                <span class="side-nav-label">일정</span>
+            </div>
+            <div class="side-nav-item" data-tooltip="수입 관리" onclick="showLoginAlert()">
+                <span class="side-nav-icon">💰</span>
+                <span class="side-nav-label">수입</span>
+            </div>
+            <div class="side-nav-item" data-tooltip="내 정보" onclick="showLoginAlert()">
+                <span class="side-nav-icon">👤</span>
+                <span class="side-nav-label">정보</span>
+            </div>
+        </nav>
+
+        <!-- 로그인 페이지 -->
+        <div id="loginPage" class="page">
+            <div class="auth-page">
+                <button class="back-button" onclick="showPage('home')">
+                    <span class="back-icon">←</span>
+                </button>
+                
+                <div class="auth-container">
+                    <div class="auth-header">
+                        <div class="auth-logo">직직직</div>
+                        <h2 class="auth-title">로그인</h2>
+                        <p class="auth-subtitle">일자리를 찾으러 가볼까요?</p>
+                    </div>
+                    
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label class="form-label required">휴대폰 번호</label>
+                            <input type="tel" class="form-input" placeholder="010-0000-0000" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required">비밀번호</label>
+                            <input type="password" class="form-input" placeholder="비밀번호를 입력하세요" required>
+                        </div>
+                        
+                        <button type="submit" class="auth-button">로그인</button>
+                    </form>
+                    
+                    <div class="auth-divider">
+                        <span>또는</span>
+                    </div>
+                    
+                    <div class="auth-link">
+                        아직 계정이 없으신가요? <a href="#" onclick="showPage('signup')">회원가입</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 회원가입 페이지 -->
+        <div id="signupPage" class="page">
+            <div class="auth-page">
+                <button class="back-button" onclick="showPage('home')">
+                    <span class="back-icon">←</span>
+                </button>
+                
+                <div class="auth-container">
+                    <div class="auth-header">
+                        <div class="auth-logo">직직직</div>
+                        <h2 class="auth-title">회원가입</h2>
+                        <p class="auth-subtitle">새로운 일자리의 시작</p>
+                    </div>
+                    
+                    <div class="step-indicator">
+                        <div class="step-dot active"></div>
+                        <div class="step-dot"></div>
+                        <div class="step-dot"></div>
+                    </div>
+                    
+                    <form id="signupForm">
+                        <!-- 1단계: 기본정보 -->
+                        <div class="form-step active" id="step1">
+                            <div class="form-group">
+                                <label class="form-label required">이름</label>
+                                <input type="text" name="name" class="form-input" placeholder="실명을 입력하세요" required>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label required">생년월일</label>
+                                    <input type="date" name="birthDate" class="form-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label required">성별</label>
+                                    <select name="gender" class="form-select" required>
+                                        <option value="">선택하세요</option>
+                                        <option value="male">남성</option>
+                                        <option value="female">여성</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label required">휴대폰 번호</label>
+                                <input type="tel" name="phone" class="form-input" placeholder="010-0000-0000" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label required">주소</label>
+                                <input type="text" name="address" class="form-input" placeholder="현재 거주지를 입력하세요" required>
+                            </div>
+                            
+                            <button type="button" class="auth-button" onclick="nextStep()">다음 단계</button>
+                        </div>
+                        
+                        <!-- 2단계: 기술 및 경험 -->
+                        <div class="form-step" id="step2">
+                            <div class="form-group">
+                                <label class="form-label required">보유 기술</label>
+                                <p style="font-size: 13px; color: var(--gray-600); margin-bottom: 12px;">
+                                    가능한 작업을 모두 선택하세요 (중복 선택 가능)
+                                </p>
+                                <div class="skills-grid">
+                                    <div class="skill-item" onclick="toggleSkill(this)">
+                                        <input type="checkbox" name="skills" value="concrete" class="skill-checkbox">
+                                        <span class="skill-label">콘크리트공</span>
+                                    </div>
+                                    <div class="skill-item" onclick="toggleSkill(this)">
+                                        <input type="checkbox" name="skills" value="rebar" class="skill-checkbox">
+                                        <span class="skill-label">철근공</span>
+                                    </div>
+                                    <div class="skill-item" onclick="toggleSkill(this)">
+                                        <input type="checkbox" name="skills" value="carpenter" class="skill-checkbox">
+                                        <span class="skill-label">목수</span>
+                                    </div>
+                                    <div class="skill-item" onclick="toggleSkill(this)">
+                                        <input type="checkbox" name="skills" value="electric" class="skill-checkbox">
+                                        <span class="skill-label">전기공</span>
+                                    </div>
+                                    <div class="skill-item" onclick="toggleSkill(this)">
+                                        <input type="checkbox" name="skills" value="plumber" class="skill-checkbox">
+                                        <span class="skill-label">배관공</span>
+                                    </div>
+                                    <div class="skill-item" onclick="toggleSkill(this)">
+                                        <input type="checkbox" name="skills" value="tile" class="skill-checkbox">
+                                        <span class="skill-label">타일공</span>
+                                    </div>
+                                    <div class="skill-item" onclick="toggleSkill(this)">
+                                        <input type="checkbox" name="skills" value="painter" class="skill-checkbox">
+                                        <span class="skill-label">도장공</span>
+                                    </div>
+                                    <div class="skill-item" onclick="toggleSkill(this)">
+                                        <input type="checkbox" name="skills" value="general" class="skill-checkbox">
+                                        <span class="skill-label">일반인부</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group" style="margin-top: 24px;">
+                                <label class="form-label required">경험 수준</label>
+                                <div class="experience-options">
+                                    <div class="experience-item" onclick="selectExperience(this)">
+                                        <input type="radio" name="experience" value="beginner" class="experience-radio">
+                                        <div class="experience-content">
+                                            <div class="experience-title">초보자 (0-1년)</div>
+                                            <div class="experience-desc">건설 현장 경험이 거의 없거나 1년 미만</div>
+                                        </div>
+                                    </div>
+                                    <div class="experience-item" onclick="selectExperience(this)">
+                                        <input type="radio" name="experience" value="intermediate" class="experience-radio">
+                                        <div class="experience-content">
+                                            <div class="experience-title">중급자 (1-5년)</div>
+                                            <div class="experience-desc">기본적인 작업은 가능하며 현장 경험이 있음</div>
+                                        </div>
+                                    </div>
+                                    <div class="experience-item" onclick="selectExperience(this)">
+                                        <input type="radio" name="experience" value="expert" class="experience-radio">
+                                        <div class="experience-content">
+                                            <div class="experience-title">숙련자 (5년+)</div>
+                                            <div class="experience-desc">전문적인 작업이 가능하며 다년간의 현장 경험</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; gap: 12px; margin-top: 32px;">
+                                <button type="button" class="auth-button" style="background: var(--gray-300); color: var(--gray-700);" onclick="prevStep()">이전</button>
+                                <button type="button" class="auth-button" onclick="nextStep()">다음 단계</button>
+                            </div>
+                        </div>
+                        
+                        <!-- 3단계: 계정 설정 및 동의 -->
+                        <div class="form-step" id="step3">
+                            <div class="form-group">
+                                <label class="form-label required">비밀번호</label>
+                                <input type="password" name="password" class="form-input" placeholder="8자 이상 입력하세요" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label required">비밀번호 확인</label>
+                                <input type="password" name="passwordConfirm" class="form-input" placeholder="비밀번호를 다시 입력하세요" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">희망 근무 지역</label>
+                                <select name="workArea" class="form-select">
+                                    <option value="">전국 (선택사항)</option>
+                                    <option value="seoul">서울특별시</option>
+                                    <option value="busan">부산광역시</option>
+                                    <option value="gyeonggi">경기도</option>
+                                    <option value="incheon">인천광역시</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-checkbox">
+                                <input type="checkbox" id="terms" class="checkbox-input" required>
+                                <label for="terms" class="checkbox-label">
+                                    <a href="#">이용약관</a> 및 <a href="#">개인정보처리방침</a>에 동의합니다. (필수)
+                                </label>
+                            </div>
+                            
+                            <div class="form-checkbox">
+                                <input type="checkbox" id="marketing" class="checkbox-input">
+                                <label for="marketing" class="checkbox-label">
+                                    맞춤 일자리 알림 및 마케팅 정보 수신에 동의합니다. (선택)
+                                </label>
+                            </div>
+                            
+                            <div style="display: flex; gap: 12px; margin-top: 32px;">
+                                <button type="button" class="auth-button" style="background: var(--gray-300); color: var(--gray-700);" onclick="prevStep()">이전</button>
+                                <button type="submit" class="auth-button">가입완료</button>
+                            </div>
+                        </div>
+                    </form>
+                    
+                    <div class="auth-link" style="margin-top: 16px;">
+                        이미 계정이 있으신가요? <a href="#" onclick="showPage('login')">로그인</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 모달 -->
+        <div class="modal-overlay" id="modalOverlay">
+            <div class="modal-content">
+                <div class="modal-icon">🔐</div>
+                <h3 class="modal-title">로그인이 필요해요</h3>
+                <p class="modal-desc">
+                    모든 기능을 이용하려면<br>
+                    먼저 로그인해주세요
+                </p>
+                <div class="modal-buttons">
+                    <button class="modal-button modal-button-secondary" onclick="closeModal()">
+                        취소
+                    </button>
+                    <button class="modal-button modal-button-primary" onclick="showPage('login'); closeModal();">
+                        로그인
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/app.js"></script>
+</body>
 </html>
