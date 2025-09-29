@@ -38,61 +38,21 @@ body {
 
 /* 메인 컨테이너 - 웹용으로 확장 */
 .app-container {
-    max-width: none; /* 최대 너비 제한 제거 */
-    width: calc(100% - 100px); /* 우측 네비게이션 80px + 여백 20px */
-    margin: 0 auto;
+    max-width: none;
+    width: calc(100% - 80px);
+    margin: 0;
     min-height: 100vh;
     background: #FFFFFF;
     position: relative;
-    padding: 0 120px; /* 좌우 여백 추가 */
 }
 
 /* 히어로 섹션 - 웹용 확장 */
 .hero-section {
     background: linear-gradient(180deg, var(--primary) 0%, var(--primary-light) 100%);
-    padding: 60px 60px 100px; /* 좌우 패딩 증가 */
+    padding: 60px 60px 100px;
     text-align: center;
     position: relative;
     overflow: hidden;
-}
-
-/* 우측 네비게이션 */
-.hero-nav {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    display: flex;
-    gap: 8px;
-    z-index: 10;
-}
-
-.nav-btn {
-    padding: 8px 16px;
-    background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: white;
-    border-radius: 20px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-}
-
-.nav-btn:hover {
-    background: rgba(255, 255, 255, 0.25);
-    border-color: rgba(255, 255, 255, 0.5);
-    transform: translateY(-2px);
-}
-
-.nav-btn:active {
-    transform: scale(0.98) translateY(0);
-}
-
-.menu-btn {
-    font-size: 16px;
-    min-width: 40px;
-    padding: 8px 12px;
 }
 
 .hero-section::before {
@@ -266,9 +226,9 @@ body {
 /* 통계 카드 섹션 - 웹용 확장 */
 .stats-cards {
     display: flex;
-    gap: 20px; /* 간격 증가 */
-    padding: 0 40px; /* 패딩 증가 */
-    margin-top: -50px; /* 더 겹치게 */
+    gap: 20px;
+    padding: 0 40px;
+    margin-top: -50px;
     margin-bottom: 48px;
     position: relative;
     z-index: 10;
@@ -356,7 +316,6 @@ body {
     letter-spacing: -0.2px;
 }
 
-/* 통계 카드 개별 애니메이션 지연 */
 .stat-card:nth-child(1) {
     animation-delay: 0.9s;
 }
@@ -540,6 +499,11 @@ body {
     color: white;
 }
 
+.badge-confirmed {
+    background: var(--success);
+    color: white;
+}
+
 .job-company {
     display: flex;
     align-items: center;
@@ -582,6 +546,15 @@ body {
     display: flex;
     align-items: center;
     gap: 4px;
+}
+
+.job-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: var(--gray-600);
 }
 
 .job-wage {
@@ -638,7 +611,6 @@ body {
     transform: scale(0.98);
 }
 
-/* 실시간 업데이트 표시 */
 .update-time {
     text-align: center;
     font-size: 12px;
@@ -646,7 +618,6 @@ body {
     margin-top: 16px;
 }
 
-/* 더보기 버튼 */
 .load-more-btn {
     width: 100%;
     padding: 16px;
@@ -832,6 +803,324 @@ body {
     color: white;
 }
 
+/* ============================================
+   대시보드 페이지 스타일
+   ============================================ */
+
+.dashboard-container {
+    background: #FFFFFF;
+    min-height: 100vh;
+    padding-bottom: 40px;
+}
+
+/* 대시보드 헤더 */
+.dashboard-header {
+    background: linear-gradient(180deg, var(--primary) 0%, var(--primary-light) 100%);
+    padding: 20px 60px 20px 20px;
+    position: relative;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.header-content {
+    color: white;
+    flex: 1;
+}
+
+.greeting {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.user-info {
+    font-size: 15px;
+    opacity: 0.9;
+}
+
+/* 로그아웃 버튼 */
+.logout-button {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    backdrop-filter: blur(10px);
+}
+
+.logout-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+}
+
+.logout-button:active {
+    transform: scale(0.98);
+}
+
+/* 혜택 하이라이트 */
+.benefits-highlight {
+    background: white;
+    margin: -20px 20px 20px 20px;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    position: relative;
+    z-index: 10;
+}
+
+.benefits-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.benefit-item {
+    background: var(--gray-50);
+    border-radius: 12px;
+    padding: 16px 12px;
+    text-align: center;
+    min-height: 90px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.benefit-item:hover {
+    background: var(--gray-100);
+    transform: translateY(-2px);
+}
+
+.benefit-icon {
+    font-size: 24px;
+    margin-bottom: 6px;
+}
+
+.benefit-title-small {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gray-900);
+    margin-bottom: 2px;
+}
+
+.benefit-desc {
+    font-size: 10px;
+    color: var(--gray-500);
+}
+
+/* 통계 섹션 */
+.stats-section {
+    display: flex;
+    gap: 12px;
+    padding: 0 20px 20px;
+}
+
+.stat-number {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 4px;
+}
+
+/* 스카우트 카드 */
+.scout-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    border: 2px solid var(--primary);
+}
+
+.scout-card.active {
+    background: linear-gradient(135deg, #E3F2FD 0%, #F3E5F5 100%);
+    border-color: var(--success);
+}
+
+.scout-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.toggle-switch {
+    width: 48px;
+    height: 24px;
+    background: var(--gray-300);
+    border-radius: 12px;
+    position: relative;
+    transition: all 0.3s;
+}
+
+.scout-card.active .toggle-switch {
+    background: var(--success);
+}
+
+.toggle-switch::after {
+    content: '';
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: all 0.3s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.scout-card.active .toggle-switch::after {
+    left: 26px;
+}
+
+.scout-status {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gray-400);
+}
+
+.scout-card.active .scout-status {
+    color: var(--success);
+}
+
+.scout-label {
+    font-size: 12px;
+    color: var(--gray-600);
+    margin-top: 4px;
+}
+
+.scout-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: var(--danger);
+    color: white;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: none;
+}
+
+.scout-card.active .scout-badge {
+    display: block;
+    background: var(--success);
+}
+
+/* 대시보드 섹션 */
+.dashboard-section {
+    padding: 24px 20px;
+}
+
+.dashboard-section .section-header {
+    margin-bottom: 16px;
+}
+
+.see-all {
+    font-size: 14px;
+    color: var(--gray-500);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.see-all:hover {
+    color: var(--primary);
+}
+
+/* 확정 일자리 카드 */
+.confirmed-job-card {
+    background: white;
+    border: 2px solid var(--success);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0, 200, 150, 0.1);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.action-btn {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    background: white;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--gray-700);
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.action-btn:hover {
+    background: var(--gray-50);
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.action-btn:active {
+    background: var(--gray-100);
+    transform: scale(0.98);
+}
+
+/* 대시보드 일자리 카드 스타일 조정 */
+.dashboard-section .job-card {
+    cursor: pointer;
+}
+
+.dashboard-section .job-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+.dashboard-section .job-card:active {
+    transform: translateY(0) scale(0.99);
+}
+
+/* 스카우트 애니메이션 */
+@keyframes pulseScout {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+    50% {
+        transform: scale(1.02);
+        box-shadow: 0 4px 16px rgba(0, 200, 150, 0.2);
+    }
+}
+
+.scout-card.active:hover {
+    animation: pulseScout 2s infinite;
+}
+
 /* 우측 사이드 네비게이션 */
 .side-nav {
     position: fixed;
@@ -897,7 +1186,6 @@ body {
     line-height: 1.2;
 }
 
-/* 사이드 네비게이션 툴팁 */
 .side-nav-item::before {
     content: attr(data-tooltip);
     position: absolute;
@@ -920,11 +1208,6 @@ body {
     opacity: 1;
     visibility: visible;
     right: 75px;
-}
-
-/* 하단 네비게이션 제거 */
-.bottom-nav {
-    display: none;
 }
 
 /* 페이지 관리 */
@@ -1112,6 +1395,7 @@ body {
     padding: 0 16px;
     color: var(--gray-500);
     font-size: 14px;
+    position: relative;
 }
 
 .auth-link {
@@ -1298,6 +1582,7 @@ body {
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
     z-index: 9999;
     justify-content: center;
     align-items: center;
@@ -1305,6 +1590,16 @@ body {
 
 .modal-overlay.show {
     display: flex;
+    animation: fadeInOverlay 0.3s ease-out;
+}
+
+@keyframes fadeInOverlay {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 .modal-content {
@@ -1377,159 +1672,260 @@ body {
     transform: scale(0.98);
 }
 
-/* 서비스 카드 - 웹용 그리드 */
-.service-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 24px;
+/* ============================================
+   로그인 모달 스타일 (개선된 UI)
+   ============================================ */
+
+.login-modal-content {
+    background: white;
+    border-radius: 24px;
+    padding: 48px 40px;
+    max-width: 440px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    position: relative;
+    animation: modalSlideUp 0.3s ease-out;
 }
 
-/* 반응형 개선 */
-@media (min-width: 768px) {
-    .service-cards {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .app-container {
-        width: calc(100% - 100px);
-    }
-    
-    .side-nav {
-        display: flex;
-    }
+.login-header {
+    text-align: center;
+    margin-bottom: 36px;
 }
 
-@media (min-width: 1024px) {
-    .service-cards {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .app-container {
-        width: calc(100% - 100px);
-    }
+.login-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 12px;
 }
 
-@media (max-width: 767px) {
-    .app-container {
-        width: 100%;
-        padding: 0 20px 100px 20px; /* 모바일용 여백 */
-    }
-    
-    .side-nav {
-        display: none;
-    }
-    
-    .bottom-nav {
-        display: flex;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 64px;
-        background: white;
-        border-top: 1px solid var(--gray-100);
-        justify-content: space-around;
-        align-items: center;
-        z-index: 1000;
-    }
-    
-    .nav-item {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 4px;
-        cursor: pointer;
-        padding: 8px;
-        min-height: 48px;
-        opacity: 0.6;
-        transition: all 0.2s;
-    }
+.logo-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--primary);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    font-weight: 700;
+}
 
-    .nav-item.active {
-        opacity: 1;
-    }
+.logo-text {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1a1a1a;
+}
 
-    .nav-item.active .nav-icon {
-        color: var(--primary);
-        transform: scale(1.1);
-    }
+.login-subtitle {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+}
 
-    .nav-item.active .nav-label {
-        color: var(--primary);
-        font-weight: 600;
-    }
+.login-form {
+    margin-bottom: 24px;
+}
 
-    .nav-icon {
-        font-size: 24px;
-        color: var(--gray-400);
-        transition: all 0.2s;
-    }
+.login-input-group {
+    margin-bottom: 20px;
+}
 
-    .nav-label {
-        font-size: 11px;
-        color: var(--gray-600);
-    }
-    
-    .hero-section {
-        padding: 48px 0 80px 0; /* 좌우 패딩 제거 */
-    }
-    
-    .stats-cards {
-        padding: 0;
-        gap: 12px;
-    }
-    
-    .jobs-section {
-        padding: 24px 0;
-    }
-    
-    .core-services-section {
-        padding: 48px 0;
-    }
-    
-    .cta-section {
-        padding: 48px 0;
-    }
-    
-    footer {
-        padding: 60px 20px 0; /* 모바일용 푸터 여백 */
-    }
-    
-    .footer-container {
-        grid-template-columns: 1fr;
-        gap: 40px;
-        padding: 0;
-    }
-    
-    .footer-links {
-        justify-content: flex-start;
-        gap: 20px;
-    }
-    
-    .footer-bottom {
-        padding: 24px 20px;
-    }
-    
-    .footer-bottom-container {
-        flex-direction: column;
-        gap: 16px;
-        text-align: center;
-        padding: 0;
-    }
+.login-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.login-input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 12px;
+    font-size: 15px;
+    transition: all 0.2s;
+    box-sizing: border-box;
+}
+
+.login-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(49, 130, 246, 0.1);
+}
+
+.login-input.error {
+    border-color: var(--danger);
+}
+
+.login-input::placeholder {
+    color: #999;
+}
+
+.password-input-wrapper {
+    position: relative;
+}
+
+.password-input-wrapper .login-input {
+    padding-right: 48px;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    color: #999;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.password-toggle:hover {
+    color: #666;
+}
+
+.eye-icon {
+    display: block;
+}
+
+.login-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    font-size: 14px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    color: #666;
+}
+
+.remember-me input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.login-button {
+    width: 100%;
+    padding: 16px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.login-button:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(49, 130, 246, 0.3);
+}
+
+.login-button:active {
+    transform: translateY(0);
+}
+
+.login-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.login-divider {
+    position: relative;
+    text-align: center;
+    margin: 24px 0;
+    color: #999;
+    font-size: 14px;
+}
+
+.login-divider::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 1px;
+    background: var(--gray-200);
+}
+
+.login-divider span {
+    position: relative;
+    background: white;
+    padding: 0 12px;
+}
+
+.login-footer {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+}
+
+.login-footer a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.login-footer a:hover {
+    text-decoration: underline;
+}
+
+.login-footer .divider {
+    margin: 0 8px;
+    color: #ddd;
+}
+
+.modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: #999;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+    padding: 0;
+    line-height: 1;
+}
+
+.modal-close:hover {
+    color: #666;
 }
 
 /* 푸터 */
 footer {
     background: #191919;
     color: white;
-    padding: 60px 120px 0; /* 컨테이너와 동일한 좌우 패딩 */
+    padding: 60px 24px 0;
 }
 
 .footer-container {
     max-width: none;
-    width: 100%;
+    width: calc(100% - 48px);
     margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr 2fr;
@@ -1569,6 +1965,7 @@ footer {
 .footer-section h4 {
     font-size: 16px;
     font-weight: 600;
+    margin-left: auto;
     margin-bottom: 16px;
 }
 
@@ -1581,6 +1978,7 @@ footer {
 
 .footer-section a {
     color: #8b95a1;
+    margin-left: auto;
     text-decoration: none;
     font-size: 14px;
     transition: color 0.2s;
@@ -1592,12 +1990,12 @@ footer {
 
 .footer-bottom {
     border-top: 1px solid #333;
-    padding: 24px 120px; /* 컨테이너와 동일한 좌우 패딩 */
+    padding: 24px 0;
 }
 
 .footer-bottom-container {
     max-width: none;
-    width: 100%;
+    width: calc(100% - 48px);
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
@@ -1619,6 +2017,130 @@ footer {
     color: white;
 }
 
+/* 서비스 카드 - 웹용 그리드 */
+.service-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+/* 반응형 개선 */
+@media (min-width: 768px) {
+    .service-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .app-container {
+        width: calc(100% - 80px);
+    }
+    
+    .side-nav {
+        display: flex;
+    }
+    
+    .login-modal-content {
+        padding: 48px 40px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .service-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 767px) {
+    .app-container {
+        width: 100%;
+        padding-bottom: 100px;
+    }
+    
+    .side-nav {
+        display: none;
+    }
+    
+    .hero-section {
+        padding: 48px 20px 80px;
+    }
+    
+    .stats-cards {
+        padding: 0 20px;
+        gap: 12px;
+    }
+    
+    .login-modal-content {
+        padding: 36px 24px;
+        width: 95%;
+        border-radius: 20px;
+    }
+    
+    .logo-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+    
+    .logo-text {
+        font-size: 28px;
+    }
+    
+    .login-subtitle {
+        font-size: 13px;
+    }
+    
+    .login-input {
+        padding: 12px 14px;
+        font-size: 14px;
+    }
+    
+    .login-button {
+        padding: 14px;
+        font-size: 15px;
+    }
+    
+    .login-options {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+    
+    .footer-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+    
+    .footer-links {
+        justify-content: flex-start;
+    }
+    
+    .footer-bottom-container {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+    }
+    
+    .dashboard-header {
+        padding: 20px 20px;
+    }
+    
+    .benefits-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .stats-section {
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+    
+    .stat-card {
+        min-width: 0;
+    }
+    
+    .dashboard-section {
+        padding: 20px 16px;
+    }
+}
+
 /* 추가 애니메이션 */
 @keyframes slideUpCards {
     from {
@@ -1638,4 +2160,33 @@ footer {
     to {
         opacity: 0;
     }
+}
+
+/* 필드 에러 스타일 */
+.field-error {
+    color: var(--danger);
+    font-size: 12px;
+    margin-top: 6px;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 알림 스타일 */
+.notification {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000;
+    animation: slideDown 0.3s ease-out;
 }
