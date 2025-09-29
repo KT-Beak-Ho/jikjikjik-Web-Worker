@@ -1,405 +1,262 @@
-// 전역 변수
-let currentStep = 1;
+// ============================================
+// APP.JS - 메인 애플리케이션 로직
+// ============================================
 
-// DOM 로드 후 초기화
+// 페이지 로드 시 초기화
 document.addEventListener('DOMContentLoaded', function() {
-    initializeApp();
+    checkLoginStatus();
+    initializeEventListeners();
 });
 
-// 앱 초기화
-function initializeApp() {
-    // 실시간 업데이트 시작
-    startJobUpdates();
+// 로그인 상태 확인
+function checkLoginStatus() {
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
     
-    // 이벤트 리스너 등록
-    setupEventListeners();
-    
-    // 페이지 로드 애니메이션
-    setupPageAnimations();
-    
-    // 폼 유효성 검사 설정
-    setupFormValidation();
-}
-
-// 이벤트 리스너 설정
-function setupEventListeners() {
-    // 일자리 카드 클릭 이벤트
-    document.querySelectorAll('.job-card').forEach(card => {
-        card.addEventListener('click', function(e) {
-            if (!e.target.classList.contains('apply-now-btn')) {
-                showNotification('상세 정보를 보려면 로그인하세요');
-            }
-        });
-    });
-
-    // 즉시 지원 버튼 클릭
-    document.querySelectorAll('.apply-now-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            showLoginAlert();
-        });
-    });
-
-    // 더보기 버튼 클릭
-    const loadMoreBtn = document.querySelector('.load-more-btn');
-    if (loadMoreBtn) {
-        loadMoreBtn.addEventListener('click', function() {
-            showNotification('더 많은 일자리를 불러오는 중...');
-            setTimeout(() => {
-                addNewJobCards();
-            }, 1000);
-        });
-    }
-
-    // 로그인 폼 제출
-    const loginForm = document.getElementById('loginForm');
-    if (loginForm) {
-        loginForm.addEventListener('submit', handleLogin);
-    }
-
-    // 회원가입 폼 제출
-    const signupForm = document.getElementById('signupForm');
-    if (signupForm) {
-        signupForm.addEventListener('submit', handleSignup);
-    }
-
-    // 모달 외부 클릭시 닫기
-    const modalOverlay = document.getElementById('modalOverlay');
-    if (modalOverlay) {
-        modalOverlay.addEventListener('click', function(e) {
-            if (e.target === modalOverlay) {
-                closeModal();
-            }
-        });
+    if (isLoggedIn) {
+        showPage('dashboard');
+        updateNavigation('home');
+    } else {
+        showPage('home');
+        updateNavigation('home');
     }
 }
 
-// 페이지 애니메이션 설정
-function setupPageAnimations() {
-    // 카드 순차 애니메이션
-    const cards = document.querySelectorAll('.job-card, .service-card');
-    cards.forEach((card, index) => {
-        setTimeout(() => {
-            card.style.animation = 'slideUpCards 0.5s ease-out';
-        }, index * 100);
-    });
-
-    // 스크롤 기반 애니메이션
-    setupScrollAnimations();
-}
-
-// 스크롤 애니메이션 설정
-function setupScrollAnimations() {
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.animation = 'fadeInUp 0.6s ease-out';
-            }
-        });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.service-card, .stat-card').forEach(el => {
-        observer.observe(el);
-    });
-}
-
-// 실시간 일자리 업데이트
-function startJobUpdates() {
-    updateJobCards();
-    setInterval(updateJobCards, 3000);
-    setInterval(updateApplicantCount, 10000);
-}
-
-// 실시간 업데이트 시뮬레이션
-function updateJobCards() {
-    const updateTimeElement = document.getElementById('updateTime');
-    const times = ['방금 전', '30초 전', '1분 전', '2분 전', '3분 전'];
-    const randomTime = times[Math.floor(Math.random() * times.length)];
+// 페이지 전환
+function showPage(pageName) {
+    // 모든 페이지 숨기기
+    const pages = document.querySelectorAll('.page');
+    pages.forEach(page => page.classList.remove('active'));
     
-    if (updateTimeElement) {
-        updateTimeElement.textContent = randomTime;
-    }
-}
-
-// 지원자 수 업데이트
-function updateApplicantCount() {
-    const applicantInfos = document.querySelectorAll('.applicants-info');
-    applicantInfos.forEach(info => {
-        const text = info.textContent;
-        const match = text.match(/지원자 (\d+)명/);
-        if (match) {
-            const currentCount = parseInt(match[1]);
-            const newCount = currentCount + Math.floor(Math.random() * 3);
-            info.textContent = text.replace(/지원자 \d+명/, `지원자 ${newCount}명`);
-            
-            // 업데이트 시 플래시 효과
-            info.closest('.job-card').style.animation = 'flash 0.5s ease-out';
-        }
-    });
-}
-
-// 새로운 일자리 카드 추가
-function addNewJobCards() {
-    showNotification('새로운 일자리 54개가 추가되었습니다!');
-    // 실제 구현에서는 API 호출로 새 데이터를 가져와 DOM에 추가
-}
-
-// 페이지 표시/숨김
-function showPage(pageId) {
-    // 모든 페이지 숨김
-    document.querySelectorAll('.page').forEach(page => {
-        page.classList.remove('active');
-    });
-    
-    // 선택된 페이지 표시
-    const targetPage = document.getElementById(pageId + 'Page');
-    if (targetPage) {
-        targetPage.classList.add('active');
+    // 선택한 페이지 표시
+    let pageToShow;
+    if (pageName === 'home') {
+        pageToShow = document.getElementById('homePage');
+    } else if (pageName === 'dashboard') {
+        pageToShow = document.getElementById('dashboardPage');
+    } else if (pageName === 'signup') {
+        pageToShow = document.getElementById('signupPage');
     }
     
-    // 페이지별 초기화
-    if (pageId === 'signup') {
-        resetSignupForm();
+    if (pageToShow) {
+        pageToShow.classList.add('active');
     }
 }
 
-// 섹션 표시
-function showSection(section) {
-    if (section !== 'home') {
+// 네비게이션 클릭 처리
+function handleNavClick(section) {
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    
+    if (!isLoggedIn && section !== 'home') {
         showLoginAlert();
+        return;
+    }
+    
+    updateNavigation(section);
+    
+    // 섹션별 처리 (추후 구현)
+    switch(section) {
+        case 'home':
+            if (isLoggedIn) {
+                showPage('dashboard');
+            } else {
+                showPage('home');
+            }
+            break;
+        case 'jobs':
+            showNotification('일자리 찾기 페이지로 이동합니다.');
+            break;
+        case 'schedule':
+            showNotification('내 일정 페이지로 이동합니다.');
+            break;
+        case 'income':
+            showNotification('수입 관리 페이지로 이동합니다.');
+            break;
+        case 'profile':
+            showNotification('내 정보 페이지로 이동합니다.');
+            break;
     }
 }
 
-// 스크롤 함수
-function scrollToJobs() {
-    const jobsSection = document.querySelector('.jobs-section');
-    if (jobsSection) {
-        jobsSection.scrollIntoView({ 
-            behavior: 'smooth' 
-        });
+// 네비게이션 활성화 상태 업데이트
+function updateNavigation(section) {
+    const navItems = document.querySelectorAll('.side-nav-item');
+    navItems.forEach(item => item.classList.remove('active'));
+    
+    const sectionMap = {
+        'home': 0,
+        'jobs': 1,
+        'schedule': 2,
+        'income': 3,
+        'profile': 4
+    };
+    
+    const index = sectionMap[section];
+    if (index !== undefined && navItems[index]) {
+        navItems[index].classList.add('active');
     }
 }
 
-// 로그인 알림 표시
+// 로그아웃 처리
+function handleLogout() {
+    if (!confirm('로그아웃 하시겠습니까?')) {
+        return;
+    }
+    
+    // 로컬 스토리지 정리
+    localStorage.removeItem('memberId');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('role');
+    localStorage.removeItem('isLoggedIn');
+    
+    showNotification('로그아웃되었습니다.', 'success');
+    
+    // 홈 페이지로 이동
+    setTimeout(() => {
+        showPage('home');
+        updateNavigation('home');
+    }, 500);
+}
+
+// 로그인 알림 모달 표시
 function showLoginAlert() {
-    const modalOverlay = document.getElementById('modalOverlay');
-    if (modalOverlay) {
-        modalOverlay.classList.add('show');
+    const modal = document.getElementById('modalOverlay');
+    if (modal) {
+        modal.classList.add('show');
     }
 }
 
 // 모달 닫기
 function closeModal() {
-    const modalOverlay = document.getElementById('modalOverlay');
-    if (modalOverlay) {
-        modalOverlay.classList.remove('show');
+    const modal = document.getElementById('modalOverlay');
+    if (modal) {
+        modal.classList.remove('show');
     }
 }
 
-// 회원가입 모달
-function showSignupModal() {
-    closeModal();
-    showPage('signup');
-}
+// 스카우트 기능 토글
+let scoutEnabled = false;
 
-// 로그인 모달
-function showLoginModal() {
-    closeModal();
-    showPage('login');
-}
-
-// 메뉴 표시
-function showMenu() {
-    const menuItems = [
-        '🏠 홈',
-        '🔨 일자리 찾기',
-        '📋 이용 가이드',
-        '💰 요금 안내',
-        '📞 고객 센터',
-        '⚙️ 설정'
-    ];
+function toggleScout() {
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
     
-    const menuText = menuItems.join('\n');
-    showNotification(`메뉴:\n${menuText}`, 'info');
+    if (!isLoggedIn) {
+        showLoginAlert();
+        return;
+    }
+    
+    scoutEnabled = !scoutEnabled;
+    const card = document.getElementById('scoutCard');
+    const statusElement = document.getElementById('scoutStatus');
+    
+    if (card && statusElement) {
+        if (scoutEnabled) {
+            card.classList.add('active');
+            statusElement.textContent = 'ON';
+            showNotification('스카우트 기능이 켜졌습니다! 기업들이 회원님을 찾을 수 있어요.', 'success');
+        } else {
+            card.classList.remove('active');
+            statusElement.textContent = 'OFF';
+            showNotification('스카우트 기능이 꺼졌습니다.', 'info');
+        }
+    }
+}
+
+// 회원가입 모달 표시
+function showSignupModal() {
+    showPage('signup');
 }
 
 // 알림 표시
 function showNotification(message, type = 'info') {
     const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
+    notification.className = 'notification';
+    
+    // 타입별 아이콘
+    let icon = 'ℹ️';
+    let bgColor = 'rgba(0, 0, 0, 0.8)';
+    
+    if (type === 'success') {
+        icon = '✅';
+        bgColor = 'rgba(0, 200, 150, 0.9)';
+    } else if (type === 'error') {
+        icon = '❌';
+        bgColor = 'rgba(255, 88, 71, 0.9)';
+    } else if (type === 'warning') {
+        icon = '⚠️';
+        bgColor = 'rgba(255, 184, 0, 0.9)';
+    }
+    
     notification.style.cssText = `
         position: fixed;
         top: 20px;
         left: 50%;
         transform: translateX(-50%);
-        background: rgba(0, 0, 0, 0.85);
+        background: ${bgColor};
         color: white;
-        padding: 14px 28px;
-        border-radius: 10px;
-        font-size: 15px;
+        padding: 12px 20px;
+        border-radius: 12px;
+        font-size: 14px;
         font-weight: 500;
-        z-index: 99999;
-        animation: slideDown 0.3s ease-out;
-        max-width: 90%;
-        text-align: center;
+        z-index: 10000;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        animation: slideDown 0.3s ease-out;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        max-width: 90%;
     `;
     
-    // 타입별 색상 설정
-    if (type === 'success') {
-        notification.style.background = 'rgba(0, 200, 150, 0.9)';
-    } else if (type === 'error') {
-        notification.style.background = 'rgba(255, 88, 71, 0.9)';
-    } else if (type === 'warning') {
-        notification.style.background = 'rgba(255, 184, 0, 0.9)';
-    }
-    
-    notification.textContent = message;
+    notification.innerHTML = `<span style="font-size: 16px;">${icon}</span> ${message}`;
     document.body.appendChild(notification);
     
     setTimeout(() => {
         notification.style.animation = 'fadeOut 0.3s ease-out';
-        setTimeout(() => notification.remove(), 300);
-    }, 2500);
+        setTimeout(() => {
+            notification.remove();
+        }, 300);
+    }, 3000);
 }
 
-// 로그인 처리
-function handleLogin(e) {
-    e.preventDefault();
-    
-    const phone = e.target.querySelector('input[type="tel"]').value;
-    const password = e.target.querySelector('input[type="password"]').value;
-    
-    if (!phone || !password) {
-        showNotification('모든 필드를 입력해주세요.', 'error');
-        return;
+// 일자리로 스크롤
+function scrollToJobs() {
+    const jobsSection = document.querySelector('.jobs-section');
+    if (jobsSection) {
+        jobsSection.scrollIntoView({ behavior: 'smooth' });
     }
-    
-    // 로딩 상태 표시
-    const submitBtn = e.target.querySelector('.auth-button');
-    const originalText = submitBtn.textContent;
-    submitBtn.textContent = '로그인 중...';
-    submitBtn.disabled = true;
-    
-    // 가상의 로그인 처리
-    setTimeout(() => {
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
-        showNotification('로그인 성공!', 'success');
-        showPage('home');
-    }, 1500);
 }
 
-// 회원가입 처리
-function handleSignup(e) {
-    e.preventDefault();
-    
-    if (currentStep < 3) {
-        return;
-    }
-    
-    // 필수 필드 검증
-    const name = e.target.querySelector('input[name="name"]').value;
-    const phone = e.target.querySelector('input[name="phone"]').value;
-    const password = e.target.querySelector('input[name="password"]').value;
-    const passwordConfirm = e.target.querySelector('input[name="passwordConfirm"]').value;
-    const termsChecked = e.target.querySelector('#terms').checked;
-    
-    if (!name || !phone || !password || !passwordConfirm) {
-        showNotification('모든 필수 필드를 입력해주세요.', 'error');
-        return;
-    }
-    
-    if (password !== passwordConfirm) {
-        showNotification('비밀번호가 일치하지 않습니다.', 'error');
-        return;
-    }
-    
-    if (!termsChecked) {
-        showNotification('이용약관에 동의해주세요.', 'error');
-        return;
-    }
-    
-    // 로딩 상태 표시
-    const submitBtn = e.target.querySelector('button[type="submit"]');
-    const originalText = submitBtn.textContent;
-    submitBtn.textContent = '가입 중...';
-    submitBtn.disabled = true;
-    
-    // 가상의 회원가입 처리
-    setTimeout(() => {
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
-        showNotification('회원가입이 완료되었습니다!', 'success');
-        showPage('home');
-    }, 2000);
-}
+// 회원가입 단계 관리
+let currentStep = 1;
 
-// 회원가입 단계 이동
 function nextStep() {
-    if (currentStep >= 3) return;
+    const steps = document.querySelectorAll('.form-step');
+    const dots = document.querySelectorAll('.step-dot');
     
-    // 현재 단계 유효성 검사
-    if (!validateCurrentStep()) {
-        return;
+    if (currentStep < steps.length) {
+        steps[currentStep - 1].classList.remove('active');
+        steps[currentStep].classList.add('active');
+        
+        dots[currentStep - 1].classList.add('completed');
+        dots[currentStep].classList.add('active');
+        
+        currentStep++;
     }
-    
-    // 현재 단계 숨김
-    document.getElementById(`step${currentStep}`).classList.remove('active');
-    document.querySelectorAll('.step-dot')[currentStep - 1].classList.remove('active');
-    document.querySelectorAll('.step-dot')[currentStep - 1].classList.add('completed');
-    
-    // 다음 단계 표시
-    currentStep++;
-    document.getElementById(`step${currentStep}`).classList.add('active');
-    document.querySelectorAll('.step-dot')[currentStep - 1].classList.add('active');
 }
 
 function prevStep() {
-    if (currentStep <= 1) return;
+    const steps = document.querySelectorAll('.form-step');
+    const dots = document.querySelectorAll('.step-dot');
     
-    // 현재 단계 숨김
-    document.getElementById(`step${currentStep}`).classList.remove('active');
-    document.querySelectorAll('.step-dot')[currentStep - 1].classList.remove('active');
-    
-    // 이전 단계 표시
-    currentStep--;
-    document.getElementById(`step${currentStep}`).classList.add('active');
-    document.querySelectorAll('.step-dot')[currentStep - 1].classList.remove('completed');
-    document.querySelectorAll('.step-dot')[currentStep - 1].classList.add('active');
-}
-
-// 현재 단계 유효성 검사
-function validateCurrentStep() {
-    const currentStepElement = document.getElementById(`step${currentStep}`);
-    
-    if (currentStep === 1) {
-        const requiredFields = currentStepElement.querySelectorAll('input[required], select[required]');
-        for (let field of requiredFields) {
-            if (!field.value.trim()) {
-                showNotification('모든 필수 필드를 입력해주세요.', 'error');
-                field.focus();
-                return false;
-            }
-        }
-    }
-    
-    if (currentStep === 2) {
-        const skills = currentStepElement.querySelectorAll('input[name="skills"]:checked');
-        const experience = currentStepElement.querySelector('input[name="experience"]:checked');
+    if (currentStep > 1) {
+        steps[currentStep - 1].classList.remove('active');
+        steps[currentStep - 2].classList.add('active');
         
-        if (skills.length === 0) {
-            showNotification('최소 하나의 기술을 선택해주세요.', 'error');
-            return false;
-        }
+        dots[currentStep - 1].classList.remove('active');
+        dots[currentStep - 2].classList.remove('completed');
         
-        if (!experience) {
-            showNotification('경험 수준을 선택해주세요.', 'error');
-            return false;
-        }
+        currentStep--;
     }
-    
-    return true;
 }
 
 // 기술 선택 토글
@@ -414,190 +271,91 @@ function toggleSkill(element) {
     }
 }
 
-// 경험 선택
+// 경험 레벨 선택
 function selectExperience(element) {
-    // 모든 경험 항목에서 선택 해제
+    const radio = element.querySelector('.experience-radio');
+    radio.checked = true;
+    
     document.querySelectorAll('.experience-item').forEach(item => {
         item.classList.remove('selected');
     });
-    
-    // 선택된 항목 활성화
     element.classList.add('selected');
-    const radio = element.querySelector('.experience-radio');
-    radio.checked = true;
 }
 
-// 회원가입 폼 리셋
-function resetSignupForm() {
-    currentStep = 1;
-    
-    // 모든 단계 숨김
-    document.querySelectorAll('.form-step').forEach(step => {
-        step.classList.remove('active');
-    });
-    
-    // 첫 번째 단계 표시
-    document.getElementById('step1').classList.add('active');
-    
-    // 단계 인디케이터 리셋
-    document.querySelectorAll('.step-dot').forEach((dot, index) => {
-        dot.classList.remove('active', 'completed');
-        if (index === 0) {
-            dot.classList.add('active');
-        }
-    });
-    
-    // 폼 초기화
+// 이벤트 리스너 초기화
+function initializeEventListeners() {
+    // 회원가입 폼 제출
     const signupForm = document.getElementById('signupForm');
     if (signupForm) {
-        signupForm.reset();
-    }
-    
-    // 선택된 기술/경험 초기화
-    document.querySelectorAll('.skill-item, .experience-item').forEach(item => {
-        item.classList.remove('selected');
-    });
-}
-
-// 폼 유효성 검사 설정
-function setupFormValidation() {
-    // 실시간 유효성 검사
-    document.querySelectorAll('.form-input').forEach(input => {
-        input.addEventListener('blur', function() {
-            validateField(this);
-        });
-        
-        input.addEventListener('input', function() {
-            if (this.classList.contains('error')) {
-                validateField(this);
-            }
-        });
-    });
-}
-
-// 필드 유효성 검사
-function validateField(field) {
-    const value = field.value.trim();
-    let isValid = true;
-    let errorMessage = '';
-    
-    // 필수 필드 검사
-    if (field.hasAttribute('required') && !value) {
-        isValid = false;
-        errorMessage = '필수 입력 항목입니다.';
-    }
-    
-    // 전화번호 형식 검사
-    if (field.type === 'tel' && value) {
-        const phoneRegex = /^010-\d{4}-\d{4}$/;
-        if (!phoneRegex.test(value)) {
-            isValid = false;
-            errorMessage = '올바른 전화번호 형식이 아닙니다.';
-        }
-    }
-    
-    // 비밀번호 길이 검사
-    if (field.type === 'password' && value && value.length < 8) {
-        isValid = false;
-        errorMessage = '비밀번호는 8자 이상이어야 합니다.';
-    }
-    
-    // 결과 표시
-    if (isValid) {
-        field.classList.remove('error');
-        removeFieldError(field);
-    } else {
-        field.classList.add('error');
-        showFieldError(field, errorMessage);
-    }
-    
-    return isValid;
-}
-
-// 필드 에러 표시
-function showFieldError(field, message) {
-    removeFieldError(field);
-    
-    const errorElement = document.createElement('div');
-    errorElement.className = 'field-error';
-    errorElement.style.cssText = `
-        color: var(--danger);
-        font-size: 12px;
-        margin-top: 4px;
-        animation: fadeIn 0.3s ease-out;
-    `;
-    errorElement.textContent = message;
-    
-    field.parentNode.appendChild(errorElement);
-}
-
-// 필드 에러 제거
-function removeFieldError(field) {
-    const existingError = field.parentNode.querySelector('.field-error');
-    if (existingError) {
-        existingError.remove();
-    }
-}
-
-// 키보드 이벤트 처리
-document.addEventListener('keydown', function(e) {
-    // ESC 키로 모달 닫기
-    if (e.key === 'Escape') {
-        closeModal();
-    }
-    
-    // Enter 키로 다음 단계 (회원가입 폼에서)
-    if (e.key === 'Enter' && document.getElementById('signupPage').classList.contains('active')) {
-        if (currentStep < 3) {
+        signupForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            nextStep();
+            showNotification('회원가입이 완료되었습니다!', 'success');
+            setTimeout(() => {
+                showPage('home');
+                showLoginModal();
+            }, 1000);
+        });
+    }
+    
+    // 액션 버튼 클릭
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('action-btn')) {
+            e.stopPropagation();
+            const action = e.target.textContent;
+            
+            if (action.includes('전화')) {
+                showNotification('현장 담당자에게 전화 연결', 'info');
+            } else if (action.includes('길찾기')) {
+                showNotification('네이버 지도로 이동', 'info');
+            } else if (action.includes('QR')) {
+                showNotification('QR 체크인 화면으로 이동', 'info');
+            }
         }
-    }
-});
-
-// 터치 이벤트 개선 (모바일)
-document.addEventListener('touchstart', function() {}, { passive: true });
-
-// 페이지 가시성 변경 시 처리
-document.addEventListener('visibilitychange', function() {
-    if (document.visibilityState === 'visible') {
-        // 페이지가 다시 보일 때 데이터 새로고침
-        updateJobCards();
-    }
-});
-
-// 온라인/오프라인 상태 처리
-window.addEventListener('online', function() {
-    showNotification('인터넷 연결이 복구되었습니다.', 'success');
-});
-
-window.addEventListener('offline', function() {
-    showNotification('인터넷 연결을 확인해주세요.', 'warning');
-});
-
-// 성능 최적화를 위한 디바운스 함수
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
+    });
+    
+    // 일자리 카드 클릭
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.job-card') && !e.target.classList.contains('action-btn') && !e.target.classList.contains('apply-now-btn')) {
+            showNotification('일자리 상세 페이지로 이동합니다.', 'info');
+        }
+    });
+    
+    // 지원 버튼 클릭
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('apply-now-btn')) {
+            e.stopPropagation();
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            
+            if (!isLoggedIn) {
+                showLoginAlert();
+            } else {
+                showNotification('일자리 지원이 완료되었습니다!', 'success');
+            }
+        }
+    });
 }
 
-// 스크롤 이벤트 최적화
-const debouncedScrollHandler = debounce(function() {
-    // 스크롤 기반 기능들
-}, 100);
-
-window.addEventListener('scroll', debouncedScrollHandler);
-
-// 리사이즈 이벤트 최적화
-const debouncedResizeHandler = debounce(function() {
-    // 화면 크기 변경 시 레이아웃 조정
-}, 250);
-
-window.addEventListener('resize', debouncedResizeHandler);
+// CSS 애니메이션 추가
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translate(-50%, -20px);
+        }
+        to {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+    }
+    
+    @keyframes fadeOut {
+        from {
+            opacity: 1;
+        }
+        to {
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(style);
