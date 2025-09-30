@@ -500,16 +500,65 @@
                         <div class="step-dot active"></div>
                         <div class="step-dot"></div>
                         <div class="step-dot"></div>
+                        <div class="step-dot"></div>
+                        <div class="step-dot"></div>
+                        <div class="step-dot"></div>
+                        <div class="step-dot"></div>
                     </div>
-                    
+
                     <form id="signupForm">
-                        <!-- 1단계: 기본정보 -->
+                        <!-- 1단계: 전화번호 인증 -->
                         <div class="form-step active" id="step1">
+                            <div class="phone-verification-section">
+                                <div class="verification-header">
+                                    <h3 class="verification-title">휴대폰 인증</h3>
+                                    <p class="verification-subtitle">안전한 가입을 위해 휴대폰 인증이 필요합니다</p>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label required">휴대폰 번호</label>
+                                    <div class="phone-input-group">
+                                        <input type="tel" name="phone" id="phoneNumber" class="form-input phone-input"
+                                               placeholder="010-0000-0000" maxlength="13" required>
+                                        <button type="button" class="verification-send-btn" onclick="sendVerificationCode()">
+                                            인증번호 발송
+                                        </button>
+                                    </div>
+                                    <div class="phone-help-text">
+                                        <span class="help-icon">ℹ️</span>
+                                        SMS로 인증번호가 발송됩니다
+                                    </div>
+                                </div>
+
+                                <div class="form-group verification-code-group" id="verificationCodeGroup" style="display: none;">
+                                    <label class="form-label required">인증번호</label>
+                                    <div class="verification-input-group">
+                                        <input type="text" name="verificationCode" id="verificationCode"
+                                               class="form-input verification-input" placeholder="6자리 인증번호"
+                                               maxlength="6" required>
+                                        <div class="verification-timer" id="verificationTimer">03:00</div>
+                                    </div>
+                                    <button type="button" class="resend-btn" onclick="resendVerificationCode()"
+                                            id="resendBtn" disabled>
+                                        인증번호 재발송
+                                    </button>
+                                </div>
+
+                                <div class="verification-status" id="verificationStatus"></div>
+                            </div>
+
+                            <button type="button" class="auth-button" id="phoneVerifyBtn" onclick="verifyPhoneNumber()" disabled>
+                                인증 완료 후 다음
+                            </button>
+                        </div>
+
+                        <!-- 2단계: 기본 정보 -->
+                        <div class="form-step" id="step2">
                             <div class="form-group">
                                 <label class="form-label required">이름</label>
                                 <input type="text" name="name" class="form-input" placeholder="실명을 입력하세요" required>
                             </div>
-                            
+
                             <div class="form-row">
                                 <div class="form-group">
                                     <label class="form-label required">생년월일</label>
@@ -524,22 +573,73 @@
                                     </select>
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
-                                <label class="form-label required">휴대폰 번호</label>
-                                <input type="tel" name="phone" class="form-input" placeholder="010-0000-0000" required>
+                                <label class="form-label required">국적</label>
+                                <p style="font-size: 13px; color: var(--gray-600); margin-bottom: 12px;">
+                                    현재 국적을 선택해주세요
+                                </p>
+                                <div class="nationality-options">
+                                    <div class="nationality-item" onclick="selectNationality(this)">
+                                        <input type="radio" name="nationality" value="korean" class="nationality-radio" required>
+                                        <div class="nationality-content">
+                                            <div class="nationality-flag">🇰🇷</div>
+                                            <div class="nationality-info">
+                                                <div class="nationality-title">내국인</div>
+                                                <div class="nationality-desc">대한민국 국적</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="nationality-item" onclick="selectNationality(this)">
+                                        <input type="radio" name="nationality" value="foreign" class="nationality-radio" required>
+                                        <div class="nationality-content">
+                                            <div class="nationality-flag">🌍</div>
+                                            <div class="nationality-info">
+                                                <div class="nationality-title">외국인</div>
+                                                <div class="nationality-desc">기타 국가 국적</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label required">주소</label>
-                                <input type="text" name="address" class="form-input" placeholder="현재 거주지를 입력하세요" required>
+
+                            <div style="display: flex; gap: 12px; margin-top: 32px;">
+                                <button type="button" class="auth-button" style="background: var(--gray-300); color: var(--gray-700);" onclick="prevStep()">이전</button>
+                                <button type="button" class="auth-button" onclick="nextStep()">다음 단계</button>
                             </div>
-                            
-                            <button type="button" class="auth-button" onclick="nextStep()">다음 단계</button>
                         </div>
-                        
-                        <!-- 2단계: 기술 및 경험 -->
-                        <div class="form-step" id="step2">
+
+                        <!-- 3단계: 주소 정보 -->
+                        <div class="form-step" id="step3">
+                            <div class="form-group">
+                                <label class="form-label required">현재 거주지</label>
+                                <div class="address-input-group">
+                                    <input type="text" name="address" id="address" class="form-input"
+                                           placeholder="주소를 검색하거나 직접 입력하세요" required>
+                                    <button type="button" class="address-search-btn" onclick="searchAddress()">
+                                        주소 검색
+                                    </button>
+                                </div>
+                                <div class="address-help-text">
+                                    <span class="help-icon">📍</span>
+                                    정확한 주소는 근처 일자리 추천에 도움이 됩니다
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">상세 주소</label>
+                                <input type="text" name="detailAddress" class="form-input"
+                                       placeholder="동, 호수 등 상세 주소 (선택사항)">
+                            </div>
+
+                            <div style="display: flex; gap: 12px; margin-top: 32px;">
+                                <button type="button" class="auth-button" style="background: var(--gray-300); color: var(--gray-700);" onclick="prevStep()">이전</button>
+                                <button type="button" class="auth-button" onclick="nextStep()">다음 단계</button>
+                            </div>
+                        </div>
+
+                        <!-- 4단계: 직종 및 경력 -->
+                        <div class="form-step" id="step4">
                             <div class="form-group">
                                 <label class="form-label required">보유 기술</label>
                                 <p style="font-size: 13px; color: var(--gray-600); margin-bottom: 12px;">
@@ -549,84 +649,53 @@
                                     <div class="skill-item" onclick="toggleSkill(this)">
                                         <input type="checkbox" name="skills" value="concrete" class="skill-checkbox">
                                         <span class="skill-label">콘크리트공</span>
+                                        <button type="button" class="add-skill-experience-btn" onclick="addSkillExperience('concrete', event)">+ 경력 추가</button>
                                     </div>
                                     <div class="skill-item" onclick="toggleSkill(this)">
                                         <input type="checkbox" name="skills" value="rebar" class="skill-checkbox">
                                         <span class="skill-label">철근공</span>
+                                        <button type="button" class="add-skill-experience-btn" onclick="addSkillExperience('rebar', event)">+ 경력 추가</button>
                                     </div>
                                     <div class="skill-item" onclick="toggleSkill(this)">
                                         <input type="checkbox" name="skills" value="carpenter" class="skill-checkbox">
                                         <span class="skill-label">목수</span>
+                                        <button type="button" class="add-skill-experience-btn" onclick="addSkillExperience('carpenter', event)">+ 경력 추가</button>
                                     </div>
                                     <div class="skill-item" onclick="toggleSkill(this)">
                                         <input type="checkbox" name="skills" value="electric" class="skill-checkbox">
                                         <span class="skill-label">전기공</span>
+                                        <button type="button" class="add-skill-experience-btn" onclick="addSkillExperience('electric', event)">+ 경력 추가</button>
                                     </div>
                                     <div class="skill-item" onclick="toggleSkill(this)">
                                         <input type="checkbox" name="skills" value="plumber" class="skill-checkbox">
                                         <span class="skill-label">배관공</span>
+                                        <button type="button" class="add-skill-experience-btn" onclick="addSkillExperience('plumber', event)">+ 경력 추가</button>
                                     </div>
                                     <div class="skill-item" onclick="toggleSkill(this)">
                                         <input type="checkbox" name="skills" value="tile" class="skill-checkbox">
                                         <span class="skill-label">타일공</span>
+                                        <button type="button" class="add-skill-experience-btn" onclick="addSkillExperience('tile', event)">+ 경력 추가</button>
                                     </div>
                                     <div class="skill-item" onclick="toggleSkill(this)">
                                         <input type="checkbox" name="skills" value="painter" class="skill-checkbox">
                                         <span class="skill-label">도장공</span>
+                                        <button type="button" class="add-skill-experience-btn" onclick="addSkillExperience('painter', event)">+ 경력 추가</button>
                                     </div>
                                     <div class="skill-item" onclick="toggleSkill(this)">
                                         <input type="checkbox" name="skills" value="general" class="skill-checkbox">
                                         <span class="skill-label">일반인부</span>
+                                        <button type="button" class="add-skill-experience-btn" onclick="addSkillExperience('general', event)">+ 경력 추가</button>
                                     </div>
                                 </div>
                             </div>
-                            
+
+                            <!-- 선택된 직종별 경력 표시 -->
+                            <div class="form-group" id="experienceSection" style="margin-top: 32px; display: none;">
+                                <label class="form-label">추가된 경력</label>
+                                <div id="experienceList" class="experience-list"></div>
+                            </div>
+
                             <div class="form-group" style="margin-top: 24px;">
-                                <label class="form-label required">경험 수준</label>
-                                <div class="experience-options">
-                                    <div class="experience-item" onclick="selectExperience(this)">
-                                        <input type="radio" name="experience" value="beginner" class="experience-radio">
-                                        <div class="experience-content">
-                                            <div class="experience-title">초보자 (0-1년)</div>
-                                            <div class="experience-desc">건설 현장 경험이 거의 없거나 1년 미만</div>
-                                        </div>
-                                    </div>
-                                    <div class="experience-item" onclick="selectExperience(this)">
-                                        <input type="radio" name="experience" value="intermediate" class="experience-radio">
-                                        <div class="experience-content">
-                                            <div class="experience-title">중급자 (1-5년)</div>
-                                            <div class="experience-desc">기본적인 작업은 가능하며 현장 경험이 있음</div>
-                                        </div>
-                                    </div>
-                                    <div class="experience-item" onclick="selectExperience(this)">
-                                        <input type="radio" name="experience" value="expert" class="experience-radio">
-                                        <div class="experience-content">
-                                            <div class="experience-title">숙련자 (5년+)</div>
-                                            <div class="experience-desc">전문적인 작업이 가능하며 다년간의 현장 경험</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div style="display: flex; gap: 12px; margin-top: 32px;">
-                                <button type="button" class="auth-button" style="background: var(--gray-300); color: var(--gray-700);" onclick="prevStep()">이전</button>
-                                <button type="button" class="auth-button" onclick="nextStep()">다음 단계</button>
-                            </div>
-                        </div>
-                        
-                        <!-- 3단계: 계정 설정 및 동의 -->
-                        <div class="form-step" id="step3">
-                            <div class="form-group">
-                                <label class="form-label required">비밀번호</label>
-                                <input type="password" name="password" class="form-input" placeholder="8자 이상 입력하세요" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label class="form-label required">비밀번호 확인</label>
-                                <input type="password" name="passwordConfirm" class="form-input" placeholder="비밀번호를 다시 입력하세요" required>
-                            </div>
-                            
-                            <div class="form-group">
                                 <label class="form-label">희망 근무 지역</label>
                                 <select name="workArea" class="form-select">
                                     <option value="">전국 (선택사항)</option>
@@ -636,21 +705,147 @@
                                     <option value="incheon">인천광역시</option>
                                 </select>
                             </div>
-                            
+
+                            <div style="display: flex; gap: 12px; margin-top: 32px;">
+                                <button type="button" class="auth-button" style="background: var(--gray-300); color: var(--gray-700);" onclick="prevStep()">이전</button>
+                                <button type="button" class="auth-button" onclick="nextStep()">다음 단계</button>
+                            </div>
+                        </div>
+
+                        <!-- 5단계: 은행 정보 -->
+                        <div class="form-step" id="step5">
+                            <div class="bank-info-header">
+                                <h3 class="bank-info-title">급여 수령 계좌</h3>
+                                <p class="bank-info-subtitle">급여를 받을 계좌 정보를 입력해주세요</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label required">은행명</label>
+                                <select name="bankName" class="form-select" required>
+                                    <option value="">은행을 선택하세요</option>
+                                    <option value="kb">KB국민은행</option>
+                                    <option value="shinhan">신한은행</option>
+                                    <option value="woori">우리은행</option>
+                                    <option value="hana">하나은행</option>
+                                    <option value="nh">NH농협은행</option>
+                                    <option value="ibk">IBK기업은행</option>
+                                    <option value="keb">KEB하나은행</option>
+                                    <option value="sc">SC제일은행</option>
+                                    <option value="citi">한국씨티은행</option>
+                                    <option value="kakao">카카오뱅크</option>
+                                    <option value="toss">토스뱅크</option>
+                                    <option value="kbank">케이뱅크</option>
+                                    <option value="busan">부산은행</option>
+                                    <option value="daegu">대구은행</option>
+                                    <option value="kyongnam">경남은행</option>
+                                    <option value="gwangju">광주은행</option>
+                                    <option value="jeonbuk">전북은행</option>
+                                    <option value="jeju">제주은행</option>
+                                    <option value="suhyup">수협은행</option>
+                                    <option value="post">우체국</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label required">계좌번호</label>
+                                <input type="text" name="accountNumber" id="accountNumber" class="form-input"
+                                       placeholder="하이픈(-) 없이 숫자만 입력" maxlength="20" required>
+                                <div class="input-help-text">
+                                    <span class="help-icon">💳</span>
+                                    정확한 계좌번호를 입력해주세요
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label required">예금주명</label>
+                                <input type="text" name="accountHolder" class="form-input"
+                                       placeholder="계좌 예금주 이름을 입력하세요" required>
+                                <div class="input-help-text">
+                                    <span class="help-icon">👤</span>
+                                    통장에 기재된 예금주명과 정확히 일치해야 합니다
+                                </div>
+                            </div>
+
+                            <div class="bank-security-notice">
+                                <div class="security-icon">🔒</div>
+                                <div class="security-content">
+                                    <div class="security-title">안전한 계좌 관리</div>
+                                    <div class="security-desc">
+                                        입력된 계좌 정보는 암호화되어 안전하게 보관되며,<br>
+                                        급여 지급 목적으로만 사용됩니다.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="display: flex; gap: 12px; margin-top: 32px;">
+                                <button type="button" class="auth-button" style="background: var(--gray-300); color: var(--gray-700);" onclick="prevStep()">이전</button>
+                                <button type="button" class="auth-button" onclick="nextStep()">다음 단계</button>
+                            </div>
+                        </div>
+
+                        <!-- 6단계: 자기소개 -->
+                        <div class="form-step" id="step6">
+                            <div class="self-intro-header">
+                                <h3 class="self-intro-title">자기소개</h3>
+                                <p class="self-intro-subtitle">자신의 장점과 특기를 어필해보세요</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">자기소개</label>
+                                <textarea name="selfIntroduction" class="form-textarea"
+                                          placeholder="예: 목수 경력 10년차로 정확하고 꼼꼼한 작업이 장점입니다. 안전수칙을 철저히 준수하며 팀워크를 중시합니다."
+                                          maxlength="500" rows="4"></textarea>
+                                <div class="textarea-counter">
+                                    <span id="charCount">0</span>/500자
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">보유 자격증</label>
+                                <div id="certificatesList" class="certificates-list"></div>
+                                <button type="button" class="add-certificate-btn" onclick="addCertificate()">
+                                    + 자격증 추가
+                                </button>
+                            </div>
+
+                            <div style="display: flex; gap: 12px; margin-top: 32px;">
+                                <button type="button" class="auth-button" style="background: var(--gray-300); color: var(--gray-700);" onclick="prevStep()">이전</button>
+                                <button type="button" class="auth-button" onclick="nextStep()">다음 단계</button>
+                            </div>
+                        </div>
+
+                        <!-- 7단계: 계정 설정 및 동의 -->
+                        <div class="form-step" id="step7">
+                            <div class="form-group">
+                                <label class="form-label required">이메일</label>
+                                <input type="email" name="email" id="email" class="form-input" placeholder="example@email.com" required>
+                                <div id="emailValidationMessage" class="validation-message" style="display: none;"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label required">비밀번호</label>
+                                <input type="password" name="password" class="form-input" placeholder="8자 이상 입력하세요" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label required">비밀번호 확인</label>
+                                <input type="password" name="passwordConfirm" class="form-input" placeholder="비밀번호를 다시 입력하세요" required>
+                            </div>
+
                             <div class="form-checkbox">
                                 <input type="checkbox" id="terms" class="checkbox-input" required>
                                 <label for="terms" class="checkbox-label">
                                     <a href="#">이용약관</a> 및 <a href="#">개인정보처리방침</a>에 동의합니다. (필수)
                                 </label>
                             </div>
-                            
+
                             <div class="form-checkbox">
                                 <input type="checkbox" id="marketing" class="checkbox-input">
                                 <label for="marketing" class="checkbox-label">
                                     맞춤 일자리 알림 및 마케팅 정보 수신에 동의합니다. (선택)
                                 </label>
                             </div>
-                            
+
                             <div style="display: flex; gap: 12px; margin-top: 32px;">
                                 <button type="button" class="auth-button" style="background: var(--gray-300); color: var(--gray-700);" onclick="prevStep()">이전</button>
                                 <button type="submit" class="auth-button">가입완료</button>
@@ -758,9 +953,57 @@
                 </div>
             </div>
         </div>
+
+        <!-- 경력 추가 모달 -->
+        <div class="modal-overlay" id="experienceModal">
+            <div class="experience-modal-content">
+                <div class="experience-modal-header">
+                    <h3 class="experience-modal-title">경력 추가</h3>
+                    <button class="modal-close" onclick="closeExperienceModal()">×</button>
+                </div>
+
+                <form id="experienceForm">
+                    <div class="experience-modal-body">
+                        <div class="form-group">
+                            <label class="form-label required">직종</label>
+                            <select id="experienceSkill" class="form-select" required>
+                                <option value="">선택하세요</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label required">경력 년수</label>
+                            <select id="experienceYears" class="form-select" required>
+                                <option value="">선택하세요</option>
+                                <option value="1">1년 미만</option>
+                                <option value="2">1년 이상 ~ 2년 미만</option>
+                                <option value="3">2년 이상 ~ 3년 미만</option>
+                                <option value="4">3년 이상 ~ 4년 미만</option>
+                                <option value="5">4년 이상 ~ 5년 미만</option>
+                                <option value="6">5년 이상 ~ 7년 미만</option>
+                                <option value="8">7년 이상 ~ 10년 미만</option>
+                                <option value="11">10년 이상 ~ 15년 미만</option>
+                                <option value="16">15년 이상 ~ 20년 미만</option>
+                                <option value="21">20년 이상</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="experience-modal-buttons">
+                        <button type="button" class="modal-button modal-button-secondary" onclick="closeExperienceModal()">
+                            취소
+                        </button>
+                        <button type="submit" class="modal-button modal-button-primary">
+                            추가
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
     <script src="./js/login.js"></script>
+    <script src="./js/signup.js"></script>
     <script src="./js/app.js"></script>
 </body>
 </html>
